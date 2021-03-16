@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #If you intend to use masscan then sudo is required.
-#Otherwise, comment out that section and the below syntax.
+#Otherwise, comment out that section.
 #Usage:  ./enum.sh <domain.com>
 
 
