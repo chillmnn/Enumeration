@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#If you intend to use masscan then sudo is required.
-#Otherwise, comment out that section.
-#Usage:  ./enum.sh <domain.com>
-
-
 url=$1
 
  if [ ! -d "$url" ];then
@@ -50,10 +45,8 @@ echo "[+] Nmap scanning for open ports..."
 nmap -iL $url/enum/httprobe/alive.txt -T4 -oA $url/enum/nmap/nmap.txt
 
 echo "[+] Grepping IPs from Nmap to Masscan..."
-cat $url/enum/nmap/nmap.txt.gnmap | while read line; do                             1 ⨯
-  ip="$(grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' <<< "$line")" 
-echo "$ip" >> $url/enum/masscan/grepped_ips.txt
-done
+cat $url/enum/nmap/nmap.txt.gnmap | grep -i "Up" | awk '/Up/{print $2}' >> $url/enum/masscan/grepped_ips.txt
+echo "[+] Grepping IPs to Masscan Complete..."
 
 echo "[+] Masscan scanning for open ports..."
 masscan -p1-65535 -iL $url/enum/masscan/grepped_ips.txt --rate 10000 -oG $url/enum/masscan/masscan_results.txt
