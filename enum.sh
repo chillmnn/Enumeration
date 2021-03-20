@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Usage:
+#             ./enum.sh <target_URL>
+#        or
+#             sudo ./enum.sh <target_URL>
+#
 
 url=$1
 
