@@ -1,12 +1,19 @@
 #!/bin/bash
-#
-# Usage:
-#             ./enum.sh <target_URL>
-#        or
-#             sudo ./enum.sh <target_URL>
-#
 
 url=$1
+
+ if [ -z "$1" ]
+  then
+   echo "                                                        "
+   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+   echo "                                                        "
+   echo "Please specify a target IP or target domain."
+   echo "Usage: ./enum.sh <example.com>"
+   echo "                                                        "
+   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+   echo "                                                        "
+        exit 1
+ fi
 
  if [ ! -d "$url" ];then
  	mkdir $url
