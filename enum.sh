@@ -13,12 +13,13 @@ url=$1
    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
    echo "                                                        "
         exit 1
+
  fi
 
  if [ ! -d "$url" ];then
  	mkdir $url
  fi
- 
+
  if [ ! -d "$url/enum" ];then
  	mkdir $url/enum
  fi
@@ -42,7 +43,11 @@ url=$1
  if [ ! -d "$url/enum/httprobe" ];then
  	mkdir $url/enum/httprobe
  fi
-
+  
+ if [ ! -d '$url/enum/aquatone' ];then
+         mkdir $url/enum/aquatone
+ fi
+ 
 echo "[+] Harvesting subdomains with Sublist3r..."
 sublist3r -d $url -v -o $url/enum/sublist3r/subdomains.txt
 sort -u $url/enum/sublist3r/subdomains.txt >> $url/enum/final.txt
@@ -53,6 +58,9 @@ sort -u $url/enum/amass/amass.txt >> $url/enum/final.txt
 
 echo "[+] Probing for alive domains with httprobe..."
 cat $url/enum/final.txt | sort -u | httprobe -s -p https:443 | sed 's/https\?:\/\///' | tr -d ':443' >> $url/enum/httprobe/alive.txt
+
+echo "[+] Running Aquatone against all compiled domains..."
+cat $url/enum/httprobe/alive.txt | /home/kali/tools/aquatone -out $url/enum/aquatone
 
 echo "[+] Nmap scanning for open ports..."
 nmap -iL $url/enum/httprobe/alive.txt -T4 -oA $url/enum/nmap/nmap.txt
